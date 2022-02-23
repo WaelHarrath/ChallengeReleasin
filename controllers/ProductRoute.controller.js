@@ -1,9 +1,93 @@
 const Product = require('../models/ProductSchema')
 const ProductType = require('../models/ProductTypeSchema')
-//const AssignedAttribute = require('../models/AssignedAttributeSchema')
-//const AttributeValue = require('../models/AttributeValueSchema')
-//const Attribute = require('../models/AttributeSchema')
+const AssignedAttribute = require('../models/AssignedAttributeSchema')
+const AttributeValue = require('../models/AttributeValueSchema')
+const Attribute = require('../models/AttributeSchema')
 
+//add attribute value
+exports.addAttributeValue= async(req,res)=>{
+    const name=req.body.name;
+    const boolType=req.body.boolType;
+    const date=req.body.date;
+    try {
+        const newAttributeValue= new AttributeValue({
+            name, boolType,date
+        })
+        const searchedAttValue=AttributeValue.findOne({name,boolType,date})
+        if(searchedAttValue){
+            return res.status(400).send({ msg: 'Attribute Value already exists!' })
+        }
+        await newAttributeValue.save();
+        res
+      .status(200)
+      .send({
+        AttributeValue: newAttributeValue,
+        msg: 'Attribute Value is saved with success',
+      })
+    } catch (error) {
+        res
+      .status(500)
+      .send({ msg: 'can not save theAttribute Value!!', error: error })
+  }
+    
+}
+// add attribute 
+exports.addAttribute=async(req,res)=>{
+const name= req.body.name;
+const type=req.body.type;
+const AttributeValueId=req.body.AttributeValueId;
+try {
+    const attributeValue= AttributeValue.findOne({_id:AttributeValueId})
+    const searchedAttribute=Attribute.findOne({name,type})
+    if(attributeValue){
+        if(!searchedAttribute){
+            const newAttribute= new Attribute({
+                name,type,attributeValue
+            })
+            await newAttribute.save()
+            res
+      .status(200)
+      .send({
+        newAttribute: newAttribute,
+        msg: 'new Attribute is saved with success',
+      })
+        }else{
+            return res.status(400).send({ msg: 'Attribute already exists!' })
+        }
+
+    }else{
+        return res.status(400).send({ msg: 'Attribute value does not exist !' })
+    }
+} catch (error) {
+    res
+    .status(500)
+    .send({ msg: 'can not save the Attribute!!', error: error })
+}
+}
+//add assigned attribute
+exports.addAssignedAttribute=async(req,res)=>{
+    const attributeValueId=req.body.attributeValue;
+    try {
+        const attributeValue=AttributeValue.findOne({_id:attributeValueId})
+        if(attributeValue){
+            const newAssignedAttribute= new AssignedAttribute({
+                attributeValue
+            })
+            await newAssignedAttribute.save()
+            .status(200)
+      .send({
+        newAssignedAttribute: newAssignedAttribute,
+        msg: 'new Assigned Attribute is saved with success',
+      })
+        }else{
+            return res.status(400).send({ msg: 'Attribute value dont exists!' })
+        }
+    } catch (error) {
+        res
+    .status(500)
+    .send({ msg: 'can not save new Assigned Attribute!!', error: error })
+    }
+}
 // add new product type
 exports.addProductType = async (req, res) => {
   const name = req.body.name
