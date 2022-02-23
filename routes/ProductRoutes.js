@@ -1,5 +1,3 @@
-console.clear();
-//imports
 
 console.clear();
 //imports
@@ -27,8 +25,12 @@ const router = express.Router();
 router.post("/add-product-type");
 //update a product type
 router.post("/update-product-type/:productTypeId");
+//get all product Types
+router.get('/product-types');
 //add a product
 router.post("/add-product",upload.single('productImg'));
 //update a product
 router.post("/update-product/:productId",upload.single('productImg'));
+//get all products
+router.get('/products');
  module.exports = router;
