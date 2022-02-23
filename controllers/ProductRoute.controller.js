@@ -4,6 +4,12 @@ const AssignedAttribute = require('../models/AssignedAttributeSchema')
 const AttributeValue = require('../models/AttributeValueSchema')
 const Attribute = require('../models/AttributeSchema')
 
+//test
+exports.testController=async(req,res)=>{
+  res
+  .status(200)
+  .send("hello fatma zahhaf server is running!!!")
+}
 //add attribute value
 exports.addAttributeValue= async(req,res)=>{
     const name=req.body.name;
@@ -149,8 +155,8 @@ exports.updateProductType = async (req, res) => {
 //add a new product
 exports.addProduct=async(req,res)=>{
     const name=req.body.name;
-    const productTypeId=req.body.productTypeId,
-    const assignedAttributes=req.body.assignedAttribute,
+    const productTypeId=req.body.productTypeId;
+    const assignedAttributes=req.body.assignedAttribute;
     const productImg=req.file;
     try {
         const productType= await ProductType.findOne({_id:productTypeId});
@@ -184,20 +190,21 @@ exports.addProduct=async(req,res)=>{
 exports.updateProduct=async(req,res)=>{
     const productId=req.params.productId;
     const name=req.body.name;
-    const productTypeId=req.body.productTypeId,
-    const assignedAttributes=req.body.assignedAttribute,
+    const productTypeId=req.body.productTypeId;
+    const assignedAttributes=req.body.assignedAttribute;
     const productImg=req.file;
     try {
+      const productType= await ProductType.findOne({_id:productTypeId});
         await Product.findOne({_id:productId},(err,searchedProduct)=>{
             if (err) {
                 res.status(400).send({ msg: 'no product with this id is found' })
               }
               if(searchedProduct){
                  if(name) searchedProduct.name=name;
-                 if (assignedAttributes) searchedProduct.assignedAttributes=assignedAttributes
+                 if (assignedAttributes) searchedProduct.assignedAttributes=assignedAttributes;
                  if(productImg) searchedProduct.productImg=productImg;
                  if(productTypeId){
-                    const productType= await ProductType.findOne({_id:productTypeId});
+                    
                     if(productType){
                         searchedProduct.productType=productType;
                     }
@@ -216,4 +223,28 @@ exports.updateProduct=async(req,res)=>{
     } catch (error) {
         res.status(500).send({ msg: 'updating was unsuccessful !!', error: error })
     }
+}
+//get all products
+exports.getAllProducts=async(req,res)=>{
+  try {
+    let result= await Product.find();
+    if(!result){
+      return res.status(400).send({ msg: "No product Found !" });
+    }
+    res.status(200).send({ products: result, msg: "Found all products" });
+  } catch (error) {
+    res.status(500).send({ errors: error, msg: "Error getting all products" });
+  }
+}
+//get all product types
+exports.getAllProductTypes=async(req,res)=>{
+  try {
+    let result= await ProductType.find();
+    if(!result){
+      return res.status(400).send({ msg: "No product types Found !" });
+    }
+    res.status(200).send({ products: result, msg: "Found all products types" });
+  } catch (error) {
+    res.status(500).send({ errors: error, msg: "Error getting all products types" });
+  }
 }
