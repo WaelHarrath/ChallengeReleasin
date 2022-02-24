@@ -33,7 +33,10 @@ const {
   getAllProductTypes,
   testController,
   getProductById,
-  getProductTypeById
+  getProductTypeById,
+  getAllAssignedAttribute,
+  getAllAttributeValues,
+  getAllAttributes
 } = require('../controllers/ProductRoute.controller')
 
 // routes
@@ -61,4 +64,11 @@ router.get('/all-products',getAllProducts)
 router.get('/all-products/:productId',getProductById)
 //get product type by ID
 router.get('/all-product-types/:productTypeId',getProductTypeById)
+
+//get all assigned attributes
+router.get('/all-assigned-attributes',getAllAssignedAttribute)
+//get all attribute values
+router.get('/all-attribute-values',getAllAttributeValues)
+//get all attribute
+router.get('/all-attributes',getAllAttributes)
 module.exports = router

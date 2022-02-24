@@ -69,13 +69,21 @@ exports.addAssignedAttribute=async(req,res)=>{
     const attributeValueId=req.body.attributeValueId;
     
     try {
-        const attributeValue= await AttributeValue.findOne({_id:attributeValueId})
-        const attribute= await Attribute.findOne({_id:attributeId})
+        const attributeValue= await AttributeValue.findOne({_id:attributeValueId});
+        const attribute= await Attribute.findOne({_id:attributeId});
             const newAssignedAttribute= new AssignedAttribute({
               attribute
             })
-            newAssignedAttribute.attributeValue.push(attributeValue);
+          const searchedAssignedAtt= await AssignedAttribute.findOne({attributeId})
+          if(searchedAssignedAtt){
+            searchedAssignedAtt.attributeValue.push(attributeValue);
+            await searchedAssignedAtt.save()
+          }else{
+            newAssignedAttribute.attributeValue=attributeValue;
             await newAssignedAttribute.save()
+          }
+            
+           
             res.status(200)
       .send({
         newAssignedAttribute: newAssignedAttribute,
@@ -274,5 +282,48 @@ exports.getProductTypeById=async(req,res)=>{
     }
   } catch (error) {
     res.status(500).send({ errors: error, msg: "Error getting the product type" });
+  }
+}
+
+//get all assigned attributes
+exports.getAllAssignedAttribute=async(req,res)=>{
+  try {
+    let result= await AssignedAttribute.find().populate("attribute").populate("attributeValue")
+    if(result){
+      return res.status(200).send({ AllAssignedAttribute: result, msg: "Found all Assigned attribute" });
+     
+    }else{
+      return res.status(400).send({ msg: "No Assigned attribute Found !" });
+    }
+  } catch (error) {
+    res.status(500).send({ errors: error, msg: "Error getting all Assigned attribute" });
+  }
+}
+//get all attribute values
+exports.getAllAttributeValues=async(req,res)=>{
+  try {
+    let result= await AttributeValue.find()
+    if(result){
+      return res.status(200).send({ AllAttributeValue: result, msg: "Found all attribute values" });
+     
+    }else{
+      return res.status(400).send({ msg: "No attribute values Found !" });
+    }
+  } catch (error) {
+    res.status(500).send({ errors: error, msg: "Error getting all attribute values" });
+  }
+}
+//get all attributes
+exports.getAllAttributes=async(req,res)=>{
+  try {
+    let result= await Attribute.find()
+    if(result){
+      return res.status(200).send({ AllAttribute: result, msg: "Found all attributes " });
+     
+    }else{
+      return res.status(400).send({ msg: "No attributes  Found !" });
+    }
+  } catch (error) {
+    res.status(500).send({ errors: error, msg: "Error getting all attributes" });
   }
 }
