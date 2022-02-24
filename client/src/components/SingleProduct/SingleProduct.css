@@ -1,4 +1,4 @@
-.terrain-card-container
+.product-card-container
 {
    text-align: left;
     display: flex;
@@ -6,7 +6,7 @@
     flex-wrap : warp;
     margin:0 15px 0 15px;
 }
-.terrain-card-container .button {
+.product-card-container .button {
     padding: 10px;
     width: 150px;
     text-decoration: none;
@@ -14,11 +14,11 @@
     font-weight: 700;
   }
 
-  .terrain-card-container .buttons {
+  .product-card-container .buttons {
     display: flex;
     justify-content: space-around;
   }
-  .terrain-card-container .edit-button {
+  .product-card-container .edit-button {
     padding: 10px;
     width: 200px;
     border-radius: 40px;
@@ -37,7 +37,7 @@
 text-align: center;
 
 }
- .terrain-carac
+ .product-carac
 {
     display: flex;
     justify-content: space-between;
@@ -46,29 +46,29 @@ text-align: center;
  width: 75%;
 
 }
- .terrain-carac p 
+ .product-carac p 
 {
     color:black;
     text-align: left;
 
 }
-.terrain-card-container img 
+.product-card-container img 
 {
   
     height: 200px;
 }
- .terr-card
+ .product-card
 {
     border:none ;
     transition: 0.5s ease;
     cursor: pointer;
     margin-top: 50px;
 }
- .terr-card:hover {
+ .product-card:hover {
     transform: scale(1.05);
     box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
 }
-.terrain-card-container span {
+.product-card-container span {
      color:black;
     font-size: 15px;
 }

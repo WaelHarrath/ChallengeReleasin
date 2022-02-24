@@ -28,8 +28,8 @@ function HomePage() {
             id={el._id}
             name={el.name}
             productImg={el.productImg}
-            //productType={el.productType}
-            //assignedAttributes={el.assignedAttributes}
+            productType={el.productType.name}
+          assignedAttributes={el.assignedAttributes._id}
             created_at={el.created_at}
           />
         )

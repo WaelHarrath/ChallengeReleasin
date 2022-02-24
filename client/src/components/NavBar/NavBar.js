@@ -20,8 +20,11 @@ function NavBar() {
       <Link to="/">
         <Navbar.Brand >Home</Navbar.Brand>
       </Link>
-      <Link to="/About">
-        <Navbar.Brand >About</Navbar.Brand>
+      <Link to="/Add-product">
+        <Navbar.Brand >Add Product</Navbar.Brand>
+      </Link>
+      <Link to="/Add-product-type">
+        <Navbar.Brand >Add Product Type</Navbar.Brand>
       </Link>
     </Nav>
   </Navbar>

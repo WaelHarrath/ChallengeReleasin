@@ -15,12 +15,12 @@ function SingleProduct( {
 
   const dispatch = useDispatch()
   return (
-    <div className="terrain-card-container">
+    <div className="product-card-container">
       <Card
-        className="terr-card"
+        className="product-card"
         style={{
           width: '20rem',
-          height: '25rem',
+          height: '30rem',
           borderRadius: '10px',
         }}
       >
@@ -33,7 +33,11 @@ function SingleProduct( {
         </Card.Header>
         <Card.Body>
           <div className="first-section">
-            <Card.Text>{name}</Card.Text>
+            <Card.Text>  <span>
+                <b>Name</b>
+              </span>
+              <br />
+            {name}</Card.Text>
             <Card.Text>
               <span>
                 <b>Attributes</b>
