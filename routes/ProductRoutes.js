@@ -31,7 +31,9 @@ const {
   updateProductType,
   getAllProducts,
   getAllProductTypes,
-  testController
+  testController,
+  getProductById,
+  getProductTypeById
 } = require('../controllers/ProductRoute.controller')
 
 // routes
@@ -48,11 +50,15 @@ router.post('/add-product-type',addProductType)
 //update a product type
 router.post('/update-product-type/:productTypeId',updateProductType)
 //get all product Types
-router.get('/product-types',getAllProductTypes)
+router.get('/all-product-types',getAllProductTypes)
 //add a product
 router.post('/add-product', upload.single('productImg'),addProduct)
 //update a product
 router.post('/update-product/:productId', upload.single('productImg'),updateProduct)
 //get all products
-router.get('/products',getAllProducts)
+router.get('/all-products',getAllProducts)
+//get product by ID
+router.get('/all-product/:productId',getProductById)
+//get product type by ID
+router.get('/all-product-types/:productTypeId',getProductTypeById)
 module.exports = router

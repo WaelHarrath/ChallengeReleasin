@@ -1,0 +1,17 @@
+.NavItems{
+    display: flex;
+    align-items: center;
+    
+}
+.NavItems Link{
+    text-decoration: none;
+}
+.NavItems img{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.NavItems .NavTitle{
+    margin-left: 20px;
+    margin-right: 20px;
+  
+}

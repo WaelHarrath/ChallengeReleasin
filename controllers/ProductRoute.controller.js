@@ -8,7 +8,7 @@ const Attribute = require('../models/AttributeSchema')
 exports.testController=async(req,res)=>{
   res
   .status(200)
-  .send("hello fatma zahhaf server is running!!!")
+  .send("hello server is running!!!")
 }
 //add attribute value
 exports.addAttributeValue= async(req,res)=>{
@@ -19,10 +19,7 @@ exports.addAttributeValue= async(req,res)=>{
         const newAttributeValue= new AttributeValue({
             name, boolType,date
         })
-        const searchedAttValue=AttributeValue.findOne({name,boolType,date})
-        if(searchedAttValue){
-            return res.status(400).send({ msg: 'Attribute Value already exists!' })
-        }
+     
         await newAttributeValue.save();
         res
       .status(200)
@@ -41,29 +38,24 @@ exports.addAttributeValue= async(req,res)=>{
 exports.addAttribute=async(req,res)=>{
 const name= req.body.name;
 const type=req.body.type;
-const AttributeValueId=req.body.AttributeValueId;
+const attributeValueId=req.body.attributeValueId;
 try {
-    const attributeValue= AttributeValue.findOne({_id:AttributeValueId})
-    const searchedAttribute=Attribute.findOne({name,type})
-    if(attributeValue){
-        if(!searchedAttribute){
-            const newAttribute= new Attribute({
-                name,type,attributeValue
+    const attributeValue= await AttributeValue.findOne({_id:attributeValueId})
+    
+       console.log(attributeValue)
+           const newAttribute= new Attribute({
+            name,type,attributeValue
             })
             await newAttribute.save()
-            res
+         res
       .status(200)
       .send({
         newAttribute: newAttribute,
         msg: 'new Attribute is saved with success',
       })
-        }else{
-            return res.status(400).send({ msg: 'Attribute already exists!' })
-        }
+        
 
-    }else{
-        return res.status(400).send({ msg: 'Attribute value does not exist !' })
-    }
+   
 } catch (error) {
     res
     .status(500)
@@ -72,15 +64,15 @@ try {
 }
 //add assigned attribute
 exports.addAssignedAttribute=async(req,res)=>{
-    const attributeValueId=req.body.attributeValue;
+    const attributeValueId=req.body.attributeValueId;
     try {
-        const attributeValue=AttributeValue.findOne({_id:attributeValueId})
+        const attributeValue= await AttributeValue.findOne({_id:attributeValueId})
         if(attributeValue){
             const newAssignedAttribute= new AssignedAttribute({
                 attributeValue
             })
             await newAssignedAttribute.save()
-            .status(200)
+            res.status(200)
       .send({
         newAssignedAttribute: newAssignedAttribute,
         msg: 'new Assigned Attribute is saved with success',
@@ -156,8 +148,8 @@ exports.updateProductType = async (req, res) => {
 exports.addProduct=async(req,res)=>{
     const name=req.body.name;
     const productTypeId=req.body.productTypeId;
-    const assignedAttributes=req.body.assignedAttribute;
-    const productImg=req.file;
+   const assignedAttributes=req.body.assignedAttribute;
+   const productImg=req.file;
     try {
         const productType= await ProductType.findOne({_id:productTypeId});
         const newProduct= new Product({
@@ -166,7 +158,10 @@ exports.addProduct=async(req,res)=>{
             assignedAttributes,
             productType
         })
-        const searchedProduct= await Product.findOne({name,productType,assignedAttributes})
+        const searchedProduct= await Product.findOne({name,
+          productType,
+          assignedAttributes
+        })
         if(searchedProduct)
         {
             return res.status(400).send({ msg: 'Product already exists!' }) 
@@ -228,10 +223,13 @@ exports.updateProduct=async(req,res)=>{
 exports.getAllProducts=async(req,res)=>{
   try {
     let result= await Product.find();
-    if(!result){
+    if(result){
+      return res.status(200).send({ products: result, msg: "Found all products" });
+     
+    }else{
       return res.status(400).send({ msg: "No product Found !" });
     }
-    res.status(200).send({ products: result, msg: "Found all products" });
+   
   } catch (error) {
     res.status(500).send({ errors: error, msg: "Error getting all products" });
   }
@@ -246,5 +244,33 @@ exports.getAllProductTypes=async(req,res)=>{
     res.status(200).send({ products: result, msg: "Found all products types" });
   } catch (error) {
     res.status(500).send({ errors: error, msg: "Error getting all products types" });
+  }
+}
+//get product by ID
+exports.getProductById=async(req,res)=>{
+  const productId=req.params.productId;
+  try {
+    let result= await Product.findOne({_id:productId})
+    if(result){
+      return res.status(200).send({ product: result, msg: "Found the product with this iD" });
+    }else{
+      return res.status(400).send({ msg: "No product with this iD is Found !" });
+    }
+  } catch (error) {
+    res.status(500).send({ errors: error, msg: "Error getting the product" });
+  }
+}
+//get product Type by ID
+exports.getProductTypeById=async(req,res)=>{
+  const productTypeId=req.params.productTypeId
+  try {
+    let result=await ProductType.findOne({_id:productTypeId})
+    if(result){
+      return res.status(200).send({ product: result, msg: "Found the product type with this iD" });
+    }else{
+      return res.status(400).send({ msg: "No product type with this iD is Found !" });
+    }
+  } catch (error) {
+    res.status(500).send({ errors: error, msg: "Error getting the product type" });
   }
 }

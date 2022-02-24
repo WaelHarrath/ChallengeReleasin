@@ -9,7 +9,7 @@ const ProductSchema = new schema({
   created_at: { type: Date, default: Date.now },
   productType: { type: schema.Types.ObjectId, ref: 'productType' },
   assignedAttributes: [
-    { type: schema.Types.ObjectId, ref: 'assignedAttribute' },
+   { type: schema.Types.ObjectId, ref: 'assignedAttribute' },
   ],
 })
 module.exports = mongoose.model('product', ProductSchema)
