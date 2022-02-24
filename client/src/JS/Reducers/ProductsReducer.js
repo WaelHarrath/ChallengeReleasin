@@ -20,8 +20,8 @@ import {
   GET_ALL_ATTRIBUTES_FAIL,
   GET_ALL_ATTRIBUTE_VALUES,
   GET_ALL_ATTRIBUTE_VALUES_FAIL,
-  GET_ALL_ASSIGNED_ATTRIBUTES,
-  GET_ALL_ASSIGNED_ATTRIBUTES_FAIL,
+GET_ASSIGNED_ATTRIBUTES_BY_ID,
+GET_ASSIGNED_ATTRIBUTES_BY_ID_FAIL
 } from '../Constants/ProductConstants'
 
 //initializing the state
@@ -47,10 +47,10 @@ export const productReducer = (state = initialState, { type, payload }) => {
       return { ...state, attribute: payload.AllAttribute, errors: null }
     case GET_ALL_ATTRIBUTES_FAIL:
       return { ...state, attribute: [], errors: payload }
-      case GET_ALL_ASSIGNED_ATTRIBUTES:
-        return{...state,assignedAttributes:payload,errors:null}
-        case GET_ALL_ASSIGNED_ATTRIBUTES_FAIL:
-        return{...state,assignedAttributes:[],errors:payload}
+      case GET_ASSIGNED_ATTRIBUTES_BY_ID:
+        return { ...state, assignedAttributes: payload.assignedAttribute, errors: null } 
+        case GET_ASSIGNED_ATTRIBUTES_BY_ID_FAIL:
+        return { ...state, assignedAttributes: [], errors: payload } 
     default:
       return state
   }

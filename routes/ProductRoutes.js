@@ -36,7 +36,8 @@ const {
   getProductTypeById,
   getAllAssignedAttribute,
   getAllAttributeValues,
-  getAllAttributes
+  getAllAttributes,
+  getAssignedAttributesById
 } = require('../controllers/ProductRoute.controller')
 
 // routes
@@ -71,4 +72,7 @@ router.get('/all-assigned-attributes',getAllAssignedAttribute)
 router.get('/all-attribute-values',getAllAttributeValues)
 //get all attribute
 router.get('/all-attributes',getAllAttributes)
+
+//get assigned attribte by id
+router.get('/assigned-attributes/:assignAttId',getAssignedAttributesById)
 module.exports = router

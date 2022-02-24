@@ -16,7 +16,8 @@ function NavBar() {
     <Link to="/">
       <Navbar.Brand className="NavTitle" >Releasin Challenge</Navbar.Brand>
     </Link>
-    <Nav className="mr-auto">
+    <div className="links">
+    <Nav >
       <Link to="/">
         <Navbar.Brand >Home</Navbar.Brand>
       </Link>
@@ -27,6 +28,7 @@ function NavBar() {
         <Navbar.Brand >Add Product Type</Navbar.Brand>
       </Link>
     </Nav>
+    </div>
   </Navbar>
   )
 }

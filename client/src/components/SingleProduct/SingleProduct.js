@@ -1,8 +1,9 @@
 import "./SingleProduct.css"
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect,useState } from 'react'
+import { useDispatch,useSelector } from 'react-redux'
 import { Card, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import Axios from "axios"
 function SingleProduct( {
   id,
   name,
@@ -14,13 +15,22 @@ function SingleProduct( {
 
 
   const dispatch = useDispatch()
+  const [assAtt,setAssAtt]=useState([])
+  const getAssignAtt=(assignedAttributes)=>{
+Axios.get(`http://localhost:5000/products/assigned-attributes/${assignedAttributes}`).then((res)=>{
+  console.log(res.data.assignedAttribute.attributeValue); setAssAtt(res.data.assignedAttribute.attributeValue)
+}).catch((err)=>console.log(err))
+  }
+ useEffect(() => {
+  getAssignAtt(assignedAttributes)
+ }, []);
   return (
     <div className="product-card-container">
       <Card
         className="product-card"
         style={{
           width: '20rem',
-          height: '30rem',
+          height: '35rem',
           borderRadius: '10px',
         }}
       >
@@ -43,8 +53,10 @@ function SingleProduct( {
                 <b>Attributes</b>
               </span>
               <br />
-
-              {assignedAttributes}
+              {assAtt&&assAtt.map((el,i)=>{
+        return <p key={i} style={{margin:"3px"}} >{el.name}</p>
+               
+              })}
             </Card.Text>
             <Card.Text>
               <span>

@@ -68,28 +68,18 @@ exports.addAttribute = async (req, res) => {
 }
 //add assigned attribute
 exports.addAssignedAttribute = async (req, res) => {
-  const attributeId = req.body.attributeId
-  const attributeValueId = req.body.attributeValueId
+  const attributeValue = req.body.attributeValue
 
   try {
-    const attributeValue = await AttributeValue.findOne({
-      _id: attributeValueId,
-    })
-    const attribute = await Attribute.findOne({ _id: attributeId })
-    const newAssignedAttribute = new AssignedAttribute({
-      attribute,
-    })
-    const searchedAssignedAtt = await AssignedAttribute.findOne({ attributeId })
-    if (searchedAssignedAtt) {
-      searchedAssignedAtt.attributeValue.push(attributeValue)
-      await searchedAssignedAtt.save()
-    } else {
-      newAssignedAttribute.attributeValue = attributeValue
-      await newAssignedAttribute.save()
-    }
-
+    const newAssignedAtt= new AssignedAttribute({});
+    const attArray = attributeValue.split(',')
+      for (let i = 0; i < attArray.length; i++) {
+      const res = await AttributeValue.findOne({ name: attArray[i] })
+      newAssignedAtt.attributeValue.push(res)
+      }
+      await newAssignedAtt.save()
     res.status(200).send({
-      newAssignedAttribute: newAssignedAttribute,
+      newAssignedAttribute: newAssignedAtt,
       msg: 'new Assigned Attribute is saved with success',
     })
   } catch (error) {
@@ -167,29 +157,31 @@ exports.updateProductType = async (req, res) => {
 exports.addProduct = async (req, res) => {
   const name = req.body.name
   const productTypeId=req.body.productTypeId;
-  //const assignedAttributes=req.body.assignedAttribute;
+  const assignedAttributes=req.body.assignedAttribute;
   const productImg = req.file.filename
   try {
     const productType= await ProductType.findOne({_id:productTypeId});
     const newProduct = new Product({
       name,
       productImg,
-      //assignedAttributes,
       productType
     })
-    const searchedProduct = await Product.findOne({
-      name,
-      productType,
-      // assignedAttributes
-    })
-    if (searchedProduct) {
-      return res.status(400).send({ msg: 'Product already exists!' })
-    }
+    
+      const newAssignedAtt= new AssignedAttribute({});
+    const attArray = assignedAttributes.split(',')
+      for (let i = 0; i < attArray.length; i++) {
+      const res = await AttributeValue.findOne({ name: attArray[i] })
+      newAssignedAtt.attributeValue.push(res)
+      }
+      await newAssignedAtt.save()
+      newProduct.assignedAttributes=newAssignedAtt;
     await newProduct.save()
     res.status(200).send({
       product: newProduct,
       msg: 'Product is saved with success',
     })
+    
+    
   } catch (error) {
     res.status(500).send({ msg: 'can not save the Product!!', error: error })
   }
@@ -300,7 +292,6 @@ exports.getProductTypeById = async (req, res) => {
 exports.getAllAssignedAttribute = async (req, res) => {
   try {
     let result = await AssignedAttribute.find()
-      .populate('attribute')
       .populate('attributeValue')
     if (result) {
       return res
@@ -348,5 +339,25 @@ exports.getAllAttributes = async (req, res) => {
     }
   } catch (error) {
     res.status(500).send({ errors: error, msg: 'Error getting all attributes' })
+  }
+}
+//get assigned attributes by Id
+exports.getAssignedAttributesById=async(req,res)=>{
+  const assignAttId=req.params.assignAttId
+  try {
+    let result = await AssignedAttribute.findOne({ _id: assignAttId }).populate('attributeValue')
+    if (result) {
+      return res
+        .status(200)
+        .send({ assignedAttribute: result, msg: 'Found the Assigned Attribute with this iD' })
+    } else {
+      return res
+        .status(400)
+        .send({ msg: 'No Assigned Attribute with this iD is Found !' })
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .send({ errors: error, msg: 'Error getting the Assigned Attribute' })
   }
 }

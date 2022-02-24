@@ -6,7 +6,7 @@ import {
   getAllProducts,
   getAllProductTypes,
   getAllAttributes,
-  getAllAssignedAttribute,
+  getAllAssignedAttribute,getAssignedAttById
 } from '../../JS/Actions/ProductActions'
 function HomePage() {
   const dispatch = useDispatch()
@@ -22,6 +22,7 @@ function HomePage() {
   return (
     <div className='container'>
       {allProducts&&allProducts.map((el, i) => {
+       // dispatch(getAssignedAttById(el.assignedAttributes))
         return (
           <SingleProduct
             key={i}
@@ -29,7 +30,7 @@ function HomePage() {
             name={el.name}
             productImg={el.productImg}
             productType={el.productType.name}
-          assignedAttributes={el.assignedAttributes._id}
+            assignedAttributes={el.assignedAttributes}
             created_at={el.created_at}
           />
         )

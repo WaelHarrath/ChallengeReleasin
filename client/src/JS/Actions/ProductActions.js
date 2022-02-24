@@ -21,7 +21,9 @@ import {
     GET_ALL_ATTRIBUTE_VALUES,
     GET_ALL_ATTRIBUTE_VALUES_FAIL,
     GET_ALL_ASSIGNED_ATTRIBUTES,
-    GET_ALL_ASSIGNED_ATTRIBUTES_FAIL
+    GET_ALL_ASSIGNED_ATTRIBUTES_FAIL,
+    GET_ASSIGNED_ATTRIBUTES_BY_ID,
+    GET_ASSIGNED_ATTRIBUTES_BY_ID_FAIL
   } from '../Constants/ProductConstants.js'
   import axios from "axios"
 //get all products
@@ -33,6 +35,10 @@ import {
       } catch (error) {
         dispatch({ type: GET_ALL_PRODUCTS_FAIL, payload: error });
       }
+  }
+  //get a product by ID
+  export const getProductById=(id)=>async(dispatch)=>{
+
   }
   //get all product types
   export const getAllProductTypes=()=>async(dispatch)=>{
@@ -61,5 +67,14 @@ try {
         dispatch({type:GET_ALL_ASSIGNED_ATTRIBUTES,payload:result.data})
     } catch (error) {
         dispatch({type:GET_ALL_ASSIGNED_ATTRIBUTES_FAIL,payload: error.response})
+    }
+  }
+  //get assigned attribute by ID
+  export const getAssignedAttById=(id)=>async(dispatch)=>{
+    try {
+        let result= await axios.get(`http://localhost:5000/products/assigned-attributes/${id}`);
+        dispatch({type:GET_ASSIGNED_ATTRIBUTES_BY_ID,payload:result.data})
+    } catch (error) {
+      dispatch({ type: GET_ASSIGNED_ATTRIBUTES_BY_ID_FAIL, payload: error });
     }
   }
