@@ -38,24 +38,33 @@ exports.addAttributeValue= async(req,res)=>{
 exports.addAttribute=async(req,res)=>{
 const name= req.body.name;
 const type=req.body.type;
-//const attributeValueId=req.body.attributeValueId;
+const attributeValueId=req.body.attributeValueId;
 try {
-   // const attributeValue= await AttributeValue.findOne({_id:attributeValueId})
-    
+   const attributeValue= await AttributeValue.findOne({_id:attributeValueId})
+    const attribute= await Attribute.findOne({name})
+    if(attribute){
+      attribute.attributeValue.push(attributeValue)
+              await attribute.save()
+                     
+        return res
+         .status(200)
+         .send({
+           newAttribute: attribute,
+           msg: 'new Attribute is saved with success',
+         })
+    }else{
+      const newAttribute= new Attribute({
+        name,type,attributeValue
+        })
+     await newAttribute.save()
+    return res
+     .status(200)
+     .send({
+       newAttribute: newAttribute,
+       msg: 'new Attribute is saved with success',
+     })
+    }
        //console.log(attributeValue)
-           const newAttribute= new Attribute({
-            name,type,
-            //attributeValue
-            })
-            await newAttribute.save()
-         res
-      .status(200)
-      .send({
-        newAttribute: newAttribute,
-        msg: 'new Attribute is saved with success',
-      })
-        
-
    
 } catch (error) {
     res
@@ -316,7 +325,7 @@ exports.getAllAttributeValues=async(req,res)=>{
 //get all attributes
 exports.getAllAttributes=async(req,res)=>{
   try {
-    let result= await Attribute.find()
+    let result= await Attribute.find().populate("attributeValue")
     if(result){
       return res.status(200).send({ AllAttribute: result, msg: "Found all attributes " });
      

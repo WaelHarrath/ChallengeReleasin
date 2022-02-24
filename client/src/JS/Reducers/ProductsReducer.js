@@ -29,7 +29,6 @@ const initialState = {
   products: [],
   productType: [],
   attribute: [],
-  attributeValues: [],
   assignedAttributes: [],
   errors: null,
 }
@@ -45,13 +44,9 @@ export const productReducer = (state = initialState, { type, payload }) => {
     case GET_ALL_PRODUCT_TYPES_FAIL:
       return { ...state, productType: [], errors: payload }
     case GET_ALL_ATTRIBUTES:
-      return { ...state, attribute: payload, errors: null }
+      return { ...state, attribute: payload.AllAttribute, errors: null }
     case GET_ALL_ATTRIBUTES_FAIL:
       return { ...state, attribute: [], errors: payload }
-    case GET_ALL_ATTRIBUTE_VALUES:
-      return { ...state, attributeValues: payload, errors: null }
-    case GET_ALL_ATTRIBUTE_VALUES_FAIL:
-      return { ...state, attributeValues: [], errors: payload }
       case GET_ALL_ASSIGNED_ATTRIBUTES:
         return{...state,assignedAttributes:payload,errors:null}
         case GET_ALL_ASSIGNED_ATTRIBUTES_FAIL:
