@@ -103,7 +103,7 @@ exports.addProductType = async (req, res) => {
     } else {
       const attArray = attributes.split(',')
       for (let i = 0; i < attArray.length; i++) {
-      const res = await Attribute.findOne({ name: attArray[i] })
+      const res = await Attribute.findOne({ name: attArray[i] }).populate('attributeValue')
      newProductType.attributes.push(res)
      
       }
@@ -159,6 +159,7 @@ exports.addProduct = async (req, res) => {
   const productTypeId=req.body.productTypeId;
   const assignedAttributes=req.body.assignedAttribute;
   const productImg = req.file.filename
+  console.log("req.body",req.body)
   try {
     const productType= await ProductType.findOne({_id:productTypeId});
     const newProduct = new Product({
@@ -168,7 +169,7 @@ exports.addProduct = async (req, res) => {
     })
     
       const newAssignedAtt= new AssignedAttribute({});
-    const attArray = assignedAttributes.split(',')
+    const attArray = assignedAttributes.trim().split(',')
       for (let i = 0; i < attArray.length; i++) {
       const res = await AttributeValue.findOne({ name: attArray[i] })
       newAssignedAtt.attributeValue.push(res)
@@ -240,7 +241,7 @@ exports.getAllProducts = async (req, res) => {
 //get all product types
 exports.getAllProductTypes = async (req, res) => {
   try {
-    let result = await ProductType.find().populate('attributes')
+    let result = await ProductType.find().populate({path:'attributes',populate:{path:"attributeValue"}})
     if (!result) {
       return res.status(400).send({ msg: 'No product types Found !' })
     }
@@ -271,7 +272,7 @@ exports.getProductById = async (req, res) => {
 exports.getProductTypeById = async (req, res) => {
   const productTypeId = req.params.productTypeId
   try {
-    let result = await ProductType.findOne({ _id: productTypeId })
+    let result = await ProductType.findOne({ _id: productTypeId }).populate({path:'attributes',populate:{path:"attributeValue"}})
     if (result) {
       return res
         .status(200)
@@ -359,5 +360,26 @@ exports.getAssignedAttributesById=async(req,res)=>{
     res
       .status(500)
       .send({ errors: error, msg: 'Error getting the Assigned Attribute' })
+  }
+}
+//get attribute value by id
+exports.getAttributeValuesById=async(req,res)=>{
+  const attrValId=req.body.attrValId
+
+  try {
+    let result = await Attribute.findOne({ name: attrValId }).populate("attributeValue")
+    if (result) {
+      return res
+        .status(200)
+        .send({ AttributeValue: result, msg: 'Found the Attribute value with this iD' })
+    } else {
+      return res
+        .status(400)
+        .send({ msg: 'No Attribute value with this iD is Found !' })
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .send({ errors: error, msg: 'Error getting the Attribute value' })
   }
 }

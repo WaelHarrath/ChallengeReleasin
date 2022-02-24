@@ -78,3 +78,14 @@ try {
       dispatch({ type: GET_ASSIGNED_ATTRIBUTES_BY_ID_FAIL, payload: error });
     }
   }
+  //add product
+  export const addProduct=(product)=>async(dispatch)=>{
+      console.log("product",product)
+    try {
+        let result= await axios.post(`http://localhost:5000/products/add-product`,product);
+        dispatch({type:ADD_PRODUCT,payload:result.data})
+        dispatch(getAllProducts())
+    } catch (error) {
+      dispatch({ type: ADD_PRODUCT_FAIL, payload: error });
+    } 
+  }
