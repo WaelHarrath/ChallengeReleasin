@@ -36,9 +36,9 @@ const initialState = {
 export const productReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case GET_ALL_PRODUCTS:
-      return { ...state, products: payload, errors: null }
+      return { ...state, products: payload.result, errors: null }
     case GET_ALL_PRODUCTS_FAIL:
-      return { ...state, products: [], errors: payload }
+      return { ...state,products:[], errors: payload }
     case GET_ALL_PRODUCT_TYPES:
       return { ...state, productType: payload, errors: null }
     case GET_ALL_PRODUCT_TYPES_FAIL:

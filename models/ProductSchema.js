@@ -4,7 +4,7 @@ const schema = mongoose.Schema
 const ProductSchema = new schema({
   name: { type: String },
   productImg: {
-    type: String,
+    type: String
   },
   created_at: { type: Date, default: Date.now },
   productType: { type: schema.Types.ObjectId, ref: 'productType' },

@@ -31,7 +31,7 @@ import {
           let result= await axios.get('http://localhost:5000/products/all-products');
           dispatch({type:GET_ALL_PRODUCTS,payload:result.data})
       } catch (error) {
-        dispatch({ type: GET_ALL_PRODUCTS_FAIL, payload: error.response });
+        dispatch({ type: GET_ALL_PRODUCTS_FAIL, payload: error });
       }
   }
   //get all product types
