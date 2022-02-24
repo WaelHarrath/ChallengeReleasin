@@ -3,7 +3,8 @@ const schema = mongoose.Schema;
 
 const AssignedAttributeSchema= new schema (
     {
-        attributeValue:{type:schema.Types.ObjectId,ref:"attributeValue"},
+        attribute:{type:schema.Types.ObjectId,ref:"attribute"},
+        attributeValue:[{type:schema.Types.ObjectId,ref:"attributeValue"}],
       
     }
 );

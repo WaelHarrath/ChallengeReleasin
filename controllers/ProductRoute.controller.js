@@ -38,13 +38,14 @@ exports.addAttributeValue= async(req,res)=>{
 exports.addAttribute=async(req,res)=>{
 const name= req.body.name;
 const type=req.body.type;
-const attributeValueId=req.body.attributeValueId;
+//const attributeValueId=req.body.attributeValueId;
 try {
-    const attributeValue= await AttributeValue.findOne({_id:attributeValueId})
+   // const attributeValue= await AttributeValue.findOne({_id:attributeValueId})
     
-       console.log(attributeValue)
+       //console.log(attributeValue)
            const newAttribute= new Attribute({
-            name,type,attributeValue
+            name,type,
+            //attributeValue
             })
             await newAttribute.save()
          res
@@ -64,22 +65,23 @@ try {
 }
 //add assigned attribute
 exports.addAssignedAttribute=async(req,res)=>{
+  const attributeId=req.body.attributeId;
     const attributeValueId=req.body.attributeValueId;
+    
     try {
         const attributeValue= await AttributeValue.findOne({_id:attributeValueId})
-        if(attributeValue){
+        const attribute= await Attribute.findOne({_id:attributeId})
             const newAssignedAttribute= new AssignedAttribute({
-                attributeValue
+              attribute
             })
+            newAssignedAttribute.attributeValue.push(attributeValue);
             await newAssignedAttribute.save()
             res.status(200)
       .send({
         newAssignedAttribute: newAssignedAttribute,
         msg: 'new Assigned Attribute is saved with success',
       })
-        }else{
-            return res.status(400).send({ msg: 'Attribute value dont exists!' })
-        }
+        
     } catch (error) {
         res
     .status(500)
