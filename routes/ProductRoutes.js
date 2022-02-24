@@ -58,7 +58,7 @@ router.post('/update-product/:productId', upload.single('productImg'),updateProd
 //get all products
 router.get('/all-products',getAllProducts)
 //get product by ID
-router.get('/all-product/:productId',getProductById)
+router.get('/all-products/:productId',getProductById)
 //get product type by ID
 router.get('/all-product-types/:productTypeId',getProductTypeById)
 module.exports = router
